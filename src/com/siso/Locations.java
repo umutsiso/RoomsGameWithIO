@@ -1,17 +1,14 @@
 package com.siso;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class Locations implements Map<Integer, Location> {
-    private static Map<Integer,Location> locations = new HashMap<>();
+    private static Map<Integer,Location> locations = new LinkedHashMap<>();
 
     public static void main(String[] args) throws IOException {
-        try(FileWriter locFile = new FileWriter("locations.txt");
-            FileWriter dirFile = new FileWriter("directions.txt");
+        try(BufferedWriter locFile = new BufferedWriter(new FileWriter("locations.txt"));
+            BufferedWriter dirFile = new BufferedWriter(new FileWriter("locations.txt"));
         ){
             for (Location location : locations.values()){
                 locFile.write(location.getLocationID() + "," + location.getDescription() +"\n");
@@ -25,12 +22,12 @@ public class Locations implements Map<Integer, Location> {
 
     static {
         //Read locations
-        try(Scanner scanner = new Scanner(new FileReader("locations.txt"))) {
-            scanner.useDelimiter(",");
-            while (scanner.hasNextLine()) {
-                int loc = scanner.nextInt();
-                scanner.skip(scanner.delimiter());
-                String description = scanner.nextLine();
+        try(BufferedReader dirFile = new BufferedReader(new FileReader("locations.txt"))) {
+            String input;
+            while ((input = dirFile.readLine()) != null) {
+                String[] data = input.split(",");
+                int loc = Integer.parseInt(data[0]);
+                String description = data[1];
                 System.out.println("Imported loc: " + loc + " " + description);
                 Map<Location.exitTypes, Integer> tempExit = new HashMap<>();
                 locations.put(loc, new Location(loc, description, tempExit));
@@ -59,46 +56,6 @@ public class Locations implements Map<Integer, Location> {
 
 
     }
-
-
-//static {
-//            HashMap<Location.exitTypes, Integer> exitTemp = new HashMap<>();
-//            Location location = new Location(0, "EXIT", exitTemp);
-//
-//            locations.put(0, location);
-//
-//            exitTemp = new HashMap<>();
-//            location = new Location(1, "PC", exitTemp);
-//            location.addExit(Location.exitTypes.NORTH, 4);
-//            location.addExit(Location.exitTypes.SOUTH, 2);
-//            location.addExit(Location.exitTypes.WEST, 3);
-//            location.addExit(Location.exitTypes.EAST, 5);
-//            locations.put(1, location);
-//
-//            exitTemp = new HashMap<>();
-//            location = new Location(2, "Room", exitTemp);
-//            location.addExit(Location.exitTypes.NORTH, 1);
-//            location.addExit(Location.exitTypes.WEST, 3);
-//            locations.put(2, location);
-//
-//            exitTemp = new HashMap<>();
-//            location = new Location(3, "River", exitTemp);
-//            location.addExit(Location.exitTypes.EAST, 1);
-//            locations.put(3, location);
-//
-//            exitTemp = new HashMap<>();
-//            location = new Location(4, "Mountain", exitTemp);
-//            location.addExit(Location.exitTypes.SOUTH, 1);
-//            location.addExit(Location.exitTypes.WEST, 3);
-//            locations.put(4, location);
-//
-//            exitTemp = new HashMap<>();
-//            location = new Location(5, "Path", exitTemp);
-//            location.addExit(Location.exitTypes.WEST, 1);
-//            location.addExit(Location.exitTypes.NORTH, 0);
-//            locations.put(5, location);
-//        }
-
 
     @Override
     public int size() {
@@ -160,3 +117,42 @@ public class Locations implements Map<Integer, Location> {
         return locations.entrySet();
     }
 }
+
+
+//static {
+//            HashMap<Location.exitTypes, Integer> exitTemp = new HashMap<>();
+//            Location location = new Location(0, "EXIT", exitTemp);
+//
+//            locations.put(0, location);
+//
+//            exitTemp = new HashMap<>();
+//            location = new Location(1, "PC", exitTemp);
+//            location.addExit(Location.exitTypes.NORTH, 4);
+//            location.addExit(Location.exitTypes.SOUTH, 2);
+//            location.addExit(Location.exitTypes.WEST, 3);
+//            location.addExit(Location.exitTypes.EAST, 5);
+//            locations.put(1, location);
+//
+//            exitTemp = new HashMap<>();
+//            location = new Location(2, "Room", exitTemp);
+//            location.addExit(Location.exitTypes.NORTH, 1);
+//            location.addExit(Location.exitTypes.WEST, 3);
+//            locations.put(2, location);
+//
+//            exitTemp = new HashMap<>();
+//            location = new Location(3, "River", exitTemp);
+//            location.addExit(Location.exitTypes.EAST, 1);
+//            locations.put(3, location);
+//
+//            exitTemp = new HashMap<>();
+//            location = new Location(4, "Mountain", exitTemp);
+//            location.addExit(Location.exitTypes.SOUTH, 1);
+//            location.addExit(Location.exitTypes.WEST, 3);
+//            locations.put(4, location);
+//
+//            exitTemp = new HashMap<>();
+//            location = new Location(5, "Path", exitTemp);
+//            location.addExit(Location.exitTypes.WEST, 1);
+//            location.addExit(Location.exitTypes.NORTH, 0);
+//            locations.put(5, location);
+//        }

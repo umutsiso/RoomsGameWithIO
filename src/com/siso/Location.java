@@ -27,12 +27,16 @@ public class Location {
     public Location(int locationID, String description, Map<exitTypes, Integer> exits) {
         this.locationID = locationID;
         this.description = description;
-        this.exits = exits;
+        if (exits== null){
+            this.exits = new LinkedHashMap<>();
+        } else {
+            this.exits = new LinkedHashMap<>(exits);
+        }
         this.addExit(exitTypes.QUIT, 0);
     }
 
 
-    public void addExit(exitTypes exitName, Integer exitNo){
+    protected void addExit(exitTypes exitName, Integer exitNo){
         exits.put(exitName, exitNo);
     }
 
@@ -43,7 +47,7 @@ public class Location {
 
 
     public HashMap<exitTypes, Integer> getExits(){
-        return new HashMap<>(exits);
+        return new LinkedHashMap<>(exits);
     }
 
 
